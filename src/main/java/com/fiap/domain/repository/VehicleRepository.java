@@ -14,4 +14,6 @@ public interface VehicleRepository {
     List<Vehicle> findAvailableVehicles();
 
     List<Vehicle> findSoldVehicles();
+
+
 }
