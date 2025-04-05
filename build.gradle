@@ -1,0 +1,59 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.1.0'
+    id 'io.spring.dependency-management' version '1.1.0'
+}
+
+group = 'com.fiap'
+version = '0.0.1-SNAPSHOT'
+
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.4'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    runtimeOnly 'org.postgresql:postgresql'
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    testImplementation 'com.h2database:h2'
+
+// Cucumber
+    testImplementation 'io.cucumber:cucumber-java:7.14.0'
+    testImplementation 'io.cucumber:cucumber-spring:7.14.0'
+    testImplementation 'io.cucumber:cucumber-junit-platform-engine:7.14.0'
+
+
+// Teste utilitários
+    testImplementation 'org.junit.platform:junit-platform-suite:1.9.3'
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+// Mockito (já deve ter, mas confirma)
+    testImplementation 'org.mockito:mockito-core:5.7.0'
+
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+tasks.register('cucumberReport', Copy) {
+    dependsOn test
+    from file("build/reports/tests/test")
+    into file("build/reports/cucumber-html")
+}
+
+test {
+    useJUnitPlatform()
+    testLogging {
+        events "passed", "skipped", "failed"
+        showStandardStreams = true
+    }
+
+    outputs.upToDateWhen { false }
+}
